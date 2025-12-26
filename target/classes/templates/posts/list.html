@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html th:replace="layout/base :: body" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" lang="">
+<body>
+
+<h2>Community Posts</h2>
+
+<div th:each="post : ${posts}">
+  <h4 th:text="${post.title}"></h4>
+  <p th:text="${post.content}"></p>
+  <p>Average Rating: <span th:text="${post.averageRating}"></span></p>
+
+  <form th:action="@{/ui/posts/{id}/rate(id=${post.id})}" method="post"
+        sec:authorize="isAuthenticated()">
+    <input type="number" name="rating" min="1" max="5">
+    <button>Rate</button>
+  </form>
+</div>
+
+<a th:href="@{/ui/posts/create}"
+   sec:authorize="isAuthenticated()">Create Post</a>
+
+</body>
+</html>

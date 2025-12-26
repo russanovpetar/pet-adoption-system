@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html th:replace="layout/base :: body" xmlns:th="http://www.thymeleaf.org" lang="">
+<body>
+
+<h2>Applications for My Shelter</h2>
+
+<table>
+  <tr>
+    <th>Pet</th>
+    <th>Adopter</th>
+    <th>Message</th>
+    <th>Action</th>
+  </tr>
+
+  <tr th:each="app : ${applications}">
+    <td th:text="${app.petName}"></td>
+    <td th:text="${app.adopterUsername}"></td>
+    <td th:text="${app.message}"></td>
+    <td>
+      <form th:action="@{/ui/adoptions/{id}/review(id=${app.id})}" method="post">
+        <button name="status" value="APPROVED">Approve</button>
+        <button name="status" value="REJECTED">Reject</button>
+      </form>
+    </td>
+  </tr>
+
+</table>
+
+</body>
+</html>

@@ -1,0 +1,9 @@
+package pet.adoption.system.ui;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+@Controller
+@RequestMapping("/ui/admin/shelter")
+public class ShelterUIController {
+}

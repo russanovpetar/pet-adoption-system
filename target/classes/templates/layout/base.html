@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" lang="">
+<head>
+  <title th:text="${title}">Pet Adoption</title>
+  <style>
+    body { font-family: Arial; margin: 40px; }
+    nav a { margin-right: 15px; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a th:href="@{/ui/pet}">Pets</a>
+  <a th:href="@{/ui/post}">Posts</a>
+  <a th:href="@{/ui/adoption}"
+     sec:authorize="hasRole('ADOPTER')">My Applications</a>
+  <a th:href="@{/ui/adoption/shelter}"
+     sec:authorize="hasRole('SHELTER_STAFF')">Review Applications</a>
+  <a th:href="@{/ui/admin/users}"
+     sec:authorize="hasRole('ADMIN')">Admin</a>
+</nav>
+
+<hr/>
+
+<div th:replace="~{::body}"></div>
+
+</body>
+</html>

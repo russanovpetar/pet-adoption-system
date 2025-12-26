@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html th:replace="layout/base :: body" xmlns:th="http://www.thymeleaf.org" lang=""
+      xmlns:sec="http://www.w3.org/1999/xhtml">
+<body>
+
+<h2 th:text="${pet.name}"></h2>
+
+<p>Age: <span th:text="${pet.age}"></span></p>
+<p>Breed: <span th:text="${pet.breed}"></span></p>
+
+<form th:action="@{/ui/adoptions/apply}" method="post"
+      sec:authorize="hasRole('ADOPTER')">
+  <input type="hidden" name="petId" th:value="${pet.id}">
+  <textarea name="message" placeholder="Why would you be a good adopter?"></textarea>
+  <br/>
+  <button>Apply for Adoption</button>
+</form>
+
+</body>
+</html>
