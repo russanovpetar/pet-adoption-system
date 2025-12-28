@@ -5,6 +5,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import pet.adoption.system.dto.request.AdoptionApplicationRequest;
+import pet.adoption.system.entity.Pet;
 import pet.adoption.system.service.PetService;
 
 @Controller
@@ -24,7 +26,11 @@ public class PetUIController {
 
   @GetMapping("/{id}")
   public String petDetails(@PathVariable Long id, Model model) {
-    model.addAttribute("pet", petService.viewPet(id));
+    Pet pet = petService.viewPet(id);
+    model.addAttribute("pet", pet);
+    AdoptionApplicationRequest form = new AdoptionApplicationRequest();
+    form.setPetId(pet.getId());
+    model.addAttribute("adoptionApplicationRequest", form);
     return "pets/details";
   }
 }

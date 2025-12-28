@@ -1,19 +1,11 @@
-<!DOCTYPE html>
-<html th:replace="layout/base :: body" xmlns:th="http://www.thymeleaf.org" lang=""
-      xmlns:sec="http://www.w3.org/1999/xhtml">
-<body>
-
-<h2>Available Pets</h2>
-
-<ul>
-  <li th:each="pet : ${pets}">
-    <a th:href="@{/ui/pet/{id}(id=${pet.id})}"
-       th:text="${pet.name}"></a>
-  </li>
-</ul>
-
-<a th:href="@{/ui/pet/create}"
-   sec:authorize="hasRole('SHELTER_STAFF')">Add Pet</a>
-
-</body>
+<html xmlns:th="http://www.w3.org/1999/xhtml" xmlns:layout="http://www.w3.org/1999/xhtml">
+  <div th:replace="layout/base :: nav-bar"></div>
+  <div layout:fragment="content">
+    <h2>Available Pets</h2>
+    <ul>
+      <li th:each="pet : ${pets}">
+        <a th:href="@{/ui/pet/{id}(id=${pet.id})}" th:text="${pet.name}"></a>
+      </li>
+    </ul>
+  </div>
 </html>

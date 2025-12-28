@@ -8,6 +8,9 @@ public class AdoptionApplicationRequest {
 
   private String message;
 
+  public void setPetId(Long petId) {
+    this.petId = petId;
+  }
 
   public Long getPetId() {
     return petId;

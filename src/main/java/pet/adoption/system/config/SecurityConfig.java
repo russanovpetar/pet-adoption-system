@@ -21,14 +21,24 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
   @Bean
   SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-    http.csrf(AbstractHttpConfigurer::disable)
+    http.csrf(csrf -> csrf.ignoringRequestMatchers("/api/**", "/h2-console/**"))
         .authorizeHttpRequests(auth -> auth
-            .requestMatchers("/api/auth/**", "/h2-console/**").permitAll()
+            .requestMatchers("/api/auth/**", "/ui/auth/**", "/h2-console", "/h2-console/**").permitAll()
             .requestMatchers(HttpMethod.GET, "/api/post/**").permitAll()
             .requestMatchers(HttpMethod.GET, "/api/pet/**").permitAll()
             .requestMatchers(HttpMethod.GET, "/ui/pet/**").permitAll()
             .anyRequest().authenticated())
             .httpBasic(Customizer.withDefaults())
+            .formLogin(form -> form
+              .loginPage("/ui/auth/login")
+              .loginProcessingUrl("/login")
+              .defaultSuccessUrl("/ui/pet", true)
+              .permitAll()
+            )
+            .logout(logout -> logout
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/ui/auth/login?logout")
+            )
             .headers(headers -> headers.frameOptions(FrameOptionsConfig::sameOrigin));
     return http.build();
   }
