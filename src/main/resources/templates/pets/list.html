@@ -1,7 +1,13 @@
-<html xmlns:th="http://www.w3.org/1999/xhtml" xmlns:layout="http://www.w3.org/1999/xhtml">
+<html xmlns:th="http://www.w3.org/1999/xhtml" xmlns:layout="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
   <div th:replace="layout/base :: nav-bar"></div>
   <div layout:fragment="content">
     <h2>Available Pets</h2>
+
+    <a th:href="@{/ui/pet/add}" sec:authorize="hasRole('SHELTER_STAFF')"
+       style="display:inline-block; margin-top:15px; padding:8px 12px; background:#2c7; color:white; border-radius:4px;">
+      Add Pet
+    </a>
+
     <ul>
       <li th:each="pet : ${pets}">
         <a th:href="@{/ui/pet/{id}(id=${pet.id})}" th:text="${pet.name}"></a>

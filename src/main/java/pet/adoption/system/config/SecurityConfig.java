@@ -10,7 +10,6 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer.FrameOptionsConfig;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -21,11 +20,12 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
   @Bean
   SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-    http.csrf(csrf -> csrf.ignoringRequestMatchers("/api/**", "/h2-console/**"))
+    http.csrf(csrf -> csrf.ignoringRequestMatchers("/api/**", "/h2-console/**", "/ui/auth/**"))
         .authorizeHttpRequests(auth -> auth
             .requestMatchers("/api/auth/**", "/ui/auth/**", "/h2-console", "/h2-console/**").permitAll()
             .requestMatchers(HttpMethod.GET, "/api/post/**").permitAll()
             .requestMatchers(HttpMethod.GET, "/api/pet/**").permitAll()
+            .requestMatchers(HttpMethod.GET, "/ui/post").permitAll()
             .requestMatchers(HttpMethod.GET, "/ui/pet/**").permitAll()
             .anyRequest().authenticated())
             .httpBasic(Customizer.withDefaults())
@@ -36,8 +36,8 @@ public class SecurityConfig {
               .permitAll()
             )
             .logout(logout -> logout
-                .logoutUrl("/logout")
-                .logoutSuccessUrl("/ui/auth/login?logout")
+                .logoutUrl("/ui/auth/logout")
+                .logoutSuccessUrl("/ui/pet")
             )
             .headers(headers -> headers.frameOptions(FrameOptionsConfig::sameOrigin));
     return http.build();

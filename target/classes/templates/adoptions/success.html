@@ -21,9 +21,11 @@
     <span th:text="${adoptionApplication.message}">n/a</span>
   </p>
 
-  <p>
-    <strong>Applied timestamp:</strong>
-    <span th:text="${adoptionApplication.appliedAt}">n/a</span>
+  <p style="color: #666; font-size: 0.9em;">
+    Applied on
+    <span th:text="${#temporals.format(adoptionApplication.appliedAt, 'dd MMM yyyy HH:mm')}">
+            01 Jan 2025
+          </span>
   </p>
 
   <a th:href="@{/ui/pet}">← Back to pets</a>

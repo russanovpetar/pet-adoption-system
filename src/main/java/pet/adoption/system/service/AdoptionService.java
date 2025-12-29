@@ -72,6 +72,18 @@ public class AdoptionService {
     return apps.stream().map(AdoptionApplicationResponse::new).toList();
   }
 
+  public List<AdoptionApplicationResponse> getApplicationsForShelterByStatus(
+      String username,
+      AdoptionApplication.Status status) {
+    User user = userRepository.findByUsername(username).orElseThrow(UserNotFoundException::new);
+
+    List<AdoptionApplication> apps = adoptionRepository.findByPetShelterId(user.getShelter().getId()).stream()
+        .filter(app -> app.getStatus() == status)
+        .toList();
+
+    return apps.stream().map(AdoptionApplicationResponse::new).toList();
+  }
+
   public AdoptionApplicationResponse reviewApplication(
       Long applicationId,
       AdoptionApplication.Status status,

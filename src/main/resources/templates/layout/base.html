@@ -3,7 +3,21 @@
     <title th:text="${title} ?: 'Pet Adoption'">Pet Adoption</title>
     <style>
       body { font-family: Arial; margin: 40px; }
-      nav a { margin-right: 15px; }
+      nav {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
+      .spacer {
+        flex-grow: 1;
+      }
+      .user-info {
+        font-size: 0.9em;
+        color: #555;
+      }
+      button {
+        cursor: pointer;
+      }
     </style>
   </head>
 
@@ -13,6 +27,24 @@
     <a th:href="@{/ui/adoption/admin}" sec:authorize="hasRole('ADMIN')">All Applications</a>
     <a th:href="@{/ui/adoption/my}" sec:authorize="hasRole('ADOPTER')">My Applications</a>
     <a th:href="@{/ui/adoption/shelter}" sec:authorize="hasRole('SHELTER_STAFF')">Review Applications</a>
-    <a th:href="@{/ui/admin/users}" sec:authorize="hasRole('ADMIN')">Admin</a>
+
+    <span class="spacer"></span>
+
+    <div sec:authorize="isAnonymous()">
+      <a th:href="@{/ui/auth/login}">Login</a>
+      <a th:href="@{/ui/auth/register}">Register</a>
+    </div>
+
+    <div sec:authorize="isAuthenticated()">
+
+      <span class="user-info">
+        <strong sec:authentication="name">username</strong>
+        <span th:text="${#strings.replace(#authentication.authorities.toString(),'ROLE_', '')}"></span>
+      </span>
+
+      <form th:action="@{/ui/auth/logout}" method="post" style="display:inline;">
+        <button type="submit">Logout</button>
+      </form>
+    </div>
   </nav>
 </div>>

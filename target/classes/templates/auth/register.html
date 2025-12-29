@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <title>Register</title>
+  <style>
+    body {
+      font-family: Arial;
+      margin: 40px;
+    }
+    form {
+      max-width: 400px;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+    }
+    input {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+    }
+    button {
+      margin-top: 20px;
+      padding: 8px 16px;
+      cursor: pointer;
+    }
+    .error {
+      color: red;
+      font-size: 0.9em;
+    }
+  </style>
+</head>
+
+<body>
+<div th:replace="layout/base :: nav-bar"></div>
+
+<h2>Create an account</h2>
+
+<form th:action="@{/ui/auth/register}"
+      method="post"
+      th:object="${registerRequest}">
+
+  <input type="hidden"
+         th:name="${_csrf.parameterName}"
+         th:value="${_csrf.token}" />
+
+  <label>
+    Username
+    <input type="text"
+           th:field="*{username}"
+           placeholder="Choose a username" />
+  </label>
+  <div class="error"
+       th:if="${#fields.hasErrors('username')}"
+       th:errors="*{username}">
+  </div>
+
+  <label>
+    Password
+    <input type="password"
+           th:field="*{password}"
+           placeholder="Choose a password" />
+  </label>
+  <div class="error"
+       th:if="${#fields.hasErrors('password')}"
+       th:errors="*{password}">
+  </div>
+
+  <button type="submit">Register</button>
+
+</form>
+
+<p>
+  Already have an account?
+  <a th:href="@{/ui/auth/login}">Login</a>
+</p>
+
+</body>
+</html>
