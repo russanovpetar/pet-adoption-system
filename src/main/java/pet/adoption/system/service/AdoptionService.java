@@ -97,6 +97,14 @@ public class AdoptionService {
       throw new AccessDeniedException("Cannot review applications for other shelters");
     }
 
+    if (status == AdoptionApplication.Status.APPROVED) {
+      petRepository.findById(app.getPet().getId()).map( pet -> {
+          pet.setAdopted(true);
+          petRepository.save(pet);
+        return pet;
+      });
+    }
+
     app.setStatus(status);
     AdoptionApplication updated = adoptionRepository.save(app);
 

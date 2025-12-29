@@ -27,6 +27,7 @@
     <a th:href="@{/ui/adoption/admin}" sec:authorize="hasRole('ADMIN')">All Applications</a>
     <a th:href="@{/ui/adoption/my}" sec:authorize="hasRole('ADOPTER')">My Applications</a>
     <a th:href="@{/ui/adoption/shelter}" sec:authorize="hasRole('SHELTER_STAFF')">Review Applications</a>
+    <a th:href="@{/ui/admin/shelter}" sec:authorize="hasRole('ADMIN')">Registered Shelters</a>
 
     <span class="spacer"></span>
 

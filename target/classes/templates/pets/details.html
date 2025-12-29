@@ -21,7 +21,10 @@
 
   <p>
     <strong>Shelter:</strong>
-    <span th:text="${pet.shelter}">n/a</span>
+    <span th:text="${pet.shelter.name}">Shelter Name</span>
+    <span th:if="${pet.shelter.location}">
+    (<span th:text="${pet.shelter.location}">Location</span>)
+  </span>
   </p>
 
   <form th:action="@{/ui/adoption}"
