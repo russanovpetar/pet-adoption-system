@@ -1,99 +1,8 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      lang="en">
-
-<head>
-  <title>Applications for My Shelter</title>
-  <style>
-    body { font-family: Arial, sans-serif; margin: 40px; }
-    h2 { margin-bottom: 20px; }
-
-    .filters {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 25px;
-    }
-
-    .filter {
-      padding: 6px 14px;
-      border-radius: 20px;
-      text-decoration: none;
-      font-weight: bold;
-      font-size: 0.9em;
-      border: 1px solid #ccc;
-      color: #333;
-      background-color: #f2f2f2;
-    }
-
-    .filter.active {
-      background-color: #333;
-      color: white;
-      border-color: #333;
-    }
-
-    .filter.pending { }
-    .filter.approved { }
-    .filter.rejected { }
-
-    .status-badge {
-      padding: 4px 10px;
-      border-radius: 12px;
-      font-size: 0.8em;
-      font-weight: bold;
-    }
-
-    .status-PENDING { background-color: #ffeb99; }
-    .status-APPROVED { background-color: #c8e6c9; }
-    .status-REJECTED { background-color: #ffcdd2; }
-
-    .application-card {
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      padding: 16px;
-      margin-bottom: 15px;
-      background-color: #f9f9f9;
-      box-shadow: 1px 1px 3px rgba(0,0,0,0.05);
-    }
-
-    .application-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 10px;
-    }
-
-    .application-info p {
-      margin: 4px 0;
-    }
-
-    .application-actions {
-      margin-top: 10px;
-    }
-
-    .application-actions button {
-      padding: 6px 12px;
-      margin-right: 8px;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-weight: bold;
-    }
-
-    .approve-btn { background-color: #4CAF50; color: white; }
-    .reject-btn { background-color: #f44336; color: white; }
-
-    .no-applications {
-      font-style: italic;
-      color: #666;
-    }
-  </style>
-</head>
-
-<body>
-
-<div th:replace="layout/base :: nav-bar"></div>
-
-<h2>Applications for My Shelter</h2>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+  <div th:replace="~{layout/base :: nav-bar}"></div>
+  <main class="container">
+    <h2>Applications for My Shelter</h2>
 
 <div class="filters">
   <a th:href="@{/ui/adoption/shelter}"
@@ -122,10 +31,9 @@
 </p>
 
 <div th:each="app : ${shelterAdoptionApplications}" class="application-card">
-
   <div class="application-header">
     <strong th:text="${app.petName}">Pet Name</strong>
-    <span th:text="${app.status}">PENDING</span>
+    <span th:class="${'status-' + app.status}" th:text="${app.status}">PENDING</span>
   </div>
 
   <div class="application-info">
@@ -141,8 +49,6 @@
       <button type="submit" name="status" value="REJECTED" class="reject-btn">Reject</button>
     </form>
   </div>
-
 </div>
-
-</body>
+  </main>
 </html>

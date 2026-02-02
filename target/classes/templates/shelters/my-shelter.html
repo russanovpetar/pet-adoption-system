@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+  <div th:replace="~{layout/base :: nav-bar}"></div>
+  <main class="container container--wide">
+    <h2>My Shelter</h2>
+
+    <p th:if="${shelter == null}" class="alert alert-error">
+      You are not assigned to a shelter. Please contact an administrator.
+    </p>
+
+    <div th:if="${shelter != null}">
+      <div class="card info-block">
+        <h3 th:text="${shelter.name}">Shelter Name</h3>
+        <p>
+          <strong>Location:</strong>
+          <span th:text="${shelter.location}">Location</span>
+        </p>
+      </div>
+
+      <p th:if="${!#lists.isEmpty(staff)}" class="mt-1">
+        <strong>Staff members:</strong>
+        <span th:each="user, iterStat : ${staff}"><span th:text="${user.username}">username</span><span th:if="${!iterStat.last}">, </span></span>
+      </p>
+
+      <div class="mt-1">
+        <a th:href="@{/ui/pet/add}" class="btn btn-primary">Add Pet</a>
+      </div>
+
+      <h3 class="mt-1">Pets at your shelter</h3>
+      <p th:if="${#lists.isEmpty(pets)}" class="text-muted">No pets listed yet.</p>
+      <div th:if="${!#lists.isEmpty(pets)}" class="pet-grid mt-1">
+        <a th:each="pet : ${pets}" th:href="@{/ui/pet/{id}(id=${pet.id})}" class="pet-card">
+          <div class="pet-card-image">
+            <img th:if="${pet.imagePath != null}" th:src="@{/uploads/pets/{filename}(filename=${pet.imageFilename})}" alt="Pet photo">
+            <img th:if="${pet.imagePath == null}" th:src="@{/images/pet-placeholder.svg}" alt="" class="pet-card-image--placeholder">
+          </div>
+          <div class="pet-card-body">
+            <span class="pet-card-name" th:text="${pet.name}">Pet Name</span>
+            <span th:if="${pet.adopted}" class="text-muted">(Adopted)</span>
+            <span th:if="${pet.createdAt != null}" class="pet-card-date text-muted" th:text="${#temporals.format(pet.createdAt, 'dd MMM yyyy')}">Date</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </main>
+</html>

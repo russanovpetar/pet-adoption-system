@@ -5,7 +5,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -22,22 +21,22 @@ public class SecurityConfig {
   SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http.csrf(csrf -> csrf.ignoringRequestMatchers("/api/**", "/h2-console/**", "/ui/auth/**"))
         .authorizeHttpRequests(auth -> auth
-            .requestMatchers("/api/auth/**", "/ui/auth/**", "/h2-console", "/h2-console/**").permitAll()
+            .requestMatchers("/", "/api/auth/**", "/ui/auth/**", "/ui", "/ui/", "/ui/home", "/h2-console", "/h2-console/**").permitAll()
+            .requestMatchers("/css/**", "/js/**", "/images/**", "/uploads/**", "/favicon.ico").permitAll()
             .requestMatchers(HttpMethod.GET, "/api/post/**").permitAll()
             .requestMatchers(HttpMethod.GET, "/api/pet/**").permitAll()
             .requestMatchers(HttpMethod.GET, "/ui/post").permitAll()
             .requestMatchers(HttpMethod.GET, "/ui/pet/**").permitAll()
             .anyRequest().authenticated())
-            .httpBasic(Customizer.withDefaults())
             .formLogin(form -> form
               .loginPage("/ui/auth/login")
               .loginProcessingUrl("/login")
-              .defaultSuccessUrl("/ui/pet", true)
+              .defaultSuccessUrl("/ui/home", true)
               .permitAll()
             )
             .logout(logout -> logout
                 .logoutUrl("/ui/auth/logout")
-                .logoutSuccessUrl("/ui/pet")
+                .logoutSuccessUrl("/ui/home")
             )
             .headers(headers -> headers.frameOptions(FrameOptionsConfig::sameOrigin));
     return http.build();

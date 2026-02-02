@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import pet.adoption.system.dto.request.RegisterRequest;
+import pet.adoption.system.exception.UserAlreadyExistsException;
 import pet.adoption.system.service.UserService;
 
 @Controller
@@ -34,14 +35,19 @@ public class AuthUIController {
   @PostMapping("/register")
   public String register(
       @Valid @ModelAttribute RegisterRequest request,
-      BindingResult bindingResult
+      BindingResult bindingResult,
+      Model model
   ) {
     if (bindingResult.hasErrors()) {
       return "auth/register";
     }
 
-    userService.registerAdopter(request);
-
-    return "redirect:/ui/auth/login?registered";
+    try {
+      userService.registerAdopter(request);
+      return "redirect:/ui/auth/login?registered";
+    } catch (UserAlreadyExistsException e) {
+      model.addAttribute("error", "Username already exists. Please choose a different username.");
+      return "auth/register";
+    }
   }
 }

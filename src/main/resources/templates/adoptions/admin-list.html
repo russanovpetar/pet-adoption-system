@@ -1,43 +1,34 @@
-<html xmlns:th="http://www.w3.org/1999/xhtml" xmlns:layout="http://www.w3.org/1999/xhtml">
-<div th:replace="layout/base :: nav-bar"></div>
-<div layout:fragment="content">
-  <h2>My Applications</h2>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <div th:replace="~{layout/base :: nav-bar}"></div>
+  <main class="container">
+    <h2>All Adoption Applications</h2>
 
-  <p th:if="${#lists.isEmpty(allAdoptionApplications)}">
-    There are no submitted adoption applications yet.
-  </p>
+    <p th:if="${#lists.isEmpty(allAdoptionApplications)}" class="text-muted">
+      There are no submitted adoption applications yet.
+    </p>
 
-  <ul th:if="${!#lists.isEmpty(allAdoptionApplications)}"
-      style="list-style: none; padding: 0; max-width: 700px;">
-    <li th:each="app : ${allAdoptionApplications}"
-        style="border: 1px solid #ddd;
-                 border-radius: 6px;
-                 padding: 16px;
-                 margin-bottom: 12px;">
+    <ul th:if="${!#lists.isEmpty(allAdoptionApplications)}" class="app-list">
+      <li th:each="app : ${allAdoptionApplications}" class="card">
+        <h3 th:text="${app.petName}">Pet Name</h3>
 
-      <h3 style="margin-top: 0;"
-          th:text="${app.petName}">
-        Pet Name
-      </h3>
+        <p>
+          <strong>Status:</strong>
+          <span th:text="${app.status}">PENDING</span>
+        </p>
 
-      <p>
-        <strong>Status:</strong>
-        <span th:text="${app.status}">PENDING</span>
-      </p>
+        <p th:if="${app.message}">
+          <strong>Message:</strong><br/>
+          <span th:text="${app.message}">Message</span>
+        </p>
 
-      <p th:if="${app.message}">
-        <strong>Your message:</strong><br/>
-        <span th:text="${app.message}">Message</span>
-      </p>
-
-      <p style="color: #666; font-size: 0.9em;">
-        Applied on
-        <span th:text="${#temporals.format(app.appliedAt, 'dd MMM yyyy HH:mm')}">
+        <p class="text-muted">
+          Applied on
+          <span th:text="${#temporals.format(app.appliedAt, 'dd MMM yyyy HH:mm')}">
             01 Jan 2025
           </span>
-      </p>
-
-    </li>
-  </ul>
-</div>
+        </p>
+      </li>
+    </ul>
+  </main>
 </html>

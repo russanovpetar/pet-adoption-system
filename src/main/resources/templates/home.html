@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+  <div th:replace="~{layout/base :: nav-bar}"></div>
+  <main class="container home-page">
+    <section class="hero">
+      <h1>Welcome to Pet Adoption</h1>
+      <p class="hero-lead">
+        Find your next furry friend and give a loving animal a forever home.
+      </p>
+    </section>
+
+    <section class="home-section">
+      <h2>How It Works</h2>
+      <div class="feature-grid">
+        <div class="card feature-card">
+          <h3>Find a Pet</h3>
+          <p>Explore animals available for adoption from shelters in your area. View each pet's details and, if you have an account, apply to adopt directly from the pet page.</p>
+          <p sec:authorize="isAnonymous()" class="text-muted" style="margin-top:0.5rem; font-size:0.9rem;">Create an account or log in to submit adoption applications.</p>
+          <a th:href="@{/ui/pet}" class="btn btn-primary">View Pets</a>
+        </div>
+        <div class="card feature-card">
+          <h3>Community Posts</h3>
+          <p>Read stories, tips, and updates from the community. Share your own experiences and connect with other pet lovers.</p>
+          <a th:href="@{/ui/post}" class="btn btn-primary">View Posts</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="home-section" sec:authorize="isAnonymous()">
+      <h2>Get Started</h2>
+      <p class="text-muted">
+        Create a free account to apply for adoption, or log in if you already have one.
+      </p>
+      <div class="home-actions">
+        <a th:href="@{/ui/auth/register}" class="btn btn-primary">Register</a>
+        <a th:href="@{/ui/auth/login}" class="btn btn-secondary">Login</a>
+      </div>
+    </section>
+  </main>
+</html>

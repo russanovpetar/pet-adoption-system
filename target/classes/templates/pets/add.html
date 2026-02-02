@@ -1,41 +1,31 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+  <div th:replace="~{layout/base :: nav-bar}"></div>
+  <main class="container">
+    <h2>Add a New Pet</h2>
 
-<body>
+    <form th:action="@{/ui/pet/add}" th:object="${petRequest}" method="post" enctype="multipart/form-data" sec:authorize="hasRole('SHELTER_STAFF')">
+      <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
 
-<div th:replace="layout/base :: nav-bar"></div>
+      <label>Pet Name</label>
+      <input type="text" th:field="*{name}" placeholder="Enter pet name" required>
+      <div class="error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
 
-<h2>Add a New Pet</h2>
+      <label>Species</label>
+      <input type="text" th:field="*{species}" placeholder="Enter pet species" required>
+      <div class="error" th:if="${#fields.hasErrors('species')}" th:errors="*{species}"></div>
 
-<form th:action="@{/ui/pet/add}" th:object="${petRequest}" method="post" sec:authorize="hasRole('SHELTER_STAFF')">
+      <label>Age</label>
+      <input type="number" th:field="*{age}" min="0" placeholder="Enter pet age" required>
+      <div class="error" th:if="${#fields.hasErrors('age')}" th:errors="*{age}"></div>
 
-  <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+      <label>Photo (optional)</label>
+      <input type="file" name="image" accept="image/jpeg,image/png,image/gif,image/webp">
 
-  <label>
-    Pet Name
-    <input type="text" th:field="*{name}" placeholder="Enter pet name" required>
-  </label>
-  <div class="error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+      <button type="submit">Add Pet</button>
+    </form>
 
-  <br/><br/>
-  <label>
-    Species
-    <input type="text" th:field="*{species}" placeholder="Enter pet species" required>
-  </label>
-  <div class="error" th:if="${#fields.hasErrors('species')}" th:errors="*{species}"></div>
-
-  <br/><br/>
-  <label>
-    Age
-    <input type="number" th:field="*{age}" min="0" placeholder="Enter pet age" required>
-  </label>
-  <div class="error" th:if="${#fields.hasErrors('age')}" th:errors="*{age}"></div>
-
-  <button type="submit" style="margin-top:10px;">Add Pet</button>
-</form>
-
-<a th:href="@{/ui/pet}" style="display:block; margin-top:15px;">Back to Pets</a>
-
-</body>
+    <a th:href="@{/ui/pet}" class="back-link">Back to Pets</a>
+  </main>
 </html>

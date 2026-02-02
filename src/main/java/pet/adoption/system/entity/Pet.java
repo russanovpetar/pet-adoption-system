@@ -1,10 +1,7 @@
 package pet.adoption.system.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 public class Pet {
@@ -20,8 +17,18 @@ public class Pet {
 
   private boolean adopted = false;
 
+  /** Path to pet photo, e.g. "uploads/pets/1.jpg" */
+  private String imagePath;
+
+  private LocalDateTime createdAt;
+
   @ManyToOne(optional = false)
   private Shelter shelter;
+
+  @PrePersist
+  void onCreate() {
+    this.createdAt = LocalDateTime.now();
+  }
 
   public Long getId() {
     return id;
@@ -61,6 +68,32 @@ public class Pet {
 
   public void setAdopted(boolean adopted) {
     this.adopted = adopted;
+  }
+
+  public String getImagePath() {
+    return imagePath;
+  }
+
+  public void setImagePath(String imagePath) {
+    this.imagePath = imagePath;
+  }
+
+  public LocalDateTime getCreatedAt() {
+    return createdAt;
+  }
+
+  public void setCreatedAt(LocalDateTime createdAt) {
+    this.createdAt = createdAt;
+  }
+
+  /** Returns just the filename for the image, e.g. "1.jpg" */
+  @Transient
+  public String getImageFilename() {
+    if (imagePath == null || imagePath.isBlank()) {
+      return null;
+    }
+    int lastSlash = imagePath.lastIndexOf('/');
+    return lastSlash >= 0 ? imagePath.substring(lastSlash + 1) : imagePath;
   }
 
   public Shelter getShelter() {

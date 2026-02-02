@@ -47,7 +47,6 @@ pet/adoption/system/repository/ShelterRepository.class
 pet/adoption/system/repository/UserRepository.class
 pet/adoption/system/entity/User.class
 pet/adoption/system/exception/ShelterNotFoundException.class
-pet/adoption/system/controller/PetController.class
 pet/adoption/system/controller/AuthController.class
 pet/adoption/system/dto/request/PostRatingRequest.class
 pet/adoption/system/service/ShelterService.class

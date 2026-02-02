@@ -1,30 +1,19 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<body>
+  <div th:replace="~{layout/base :: nav-bar}"></div>
+  <main class="container">
+    <h2>Registered Shelters</h2>
 
-<div th:replace="layout/base :: nav-bar"></div>
+    <a th:href="@{/ui/admin/shelter/create}" sec:authorize="hasRole('ADMIN')" class="btn btn-primary">
+      Create Shelter
+    </a>
 
-<h2>Registered Shelters</h2>
-
-<a th:href="@{/ui/admin/shelter/create}" sec:authorize="hasRole('ADMIN')"
-   style="display:inline-block; margin-top:15px; padding:8px 12px; background:#2c7; color:white; border-radius:4px;">
-  Create Shelter
-</a>
-
-<br/><br/>
-
-<div th:each="shelter : ${shelters}"
-     style="border:1px solid #ddd; padding:15px; margin-bottom:10px; border-radius:6px;">
-
-  <a th:href="@{/ui/admin/shelter/{id}(id=${shelter.id})}"
-     aria-label="View shelter details"
-     style="text-decoration:none; color:inherit; display:block;">
-
-    <h4 th:text="${shelter.name}">Shelter Name</h4>
-    <p th:text="${shelter.location}">Shelter Location</p>
-
-  </a>
-</div>
-
-</body>
+    <div th:each="shelter : ${shelters}" class="card mt-1">
+      <a th:href="@{/ui/admin/shelter/{id}(id=${shelter.id})}"
+         aria-label="View shelter details">
+        <h4 th:text="${shelter.name}">Shelter Name</h4>
+        <p class="text-muted" th:text="${shelter.location}">Shelter Location</p>
+      </a>
+    </div>
+  </main>
 </html>

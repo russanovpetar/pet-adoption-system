@@ -98,11 +98,18 @@ public class AdoptionService {
     }
 
     if (status == AdoptionApplication.Status.APPROVED) {
-      petRepository.findById(app.getPet().getId()).map( pet -> {
-          pet.setAdopted(true);
-          petRepository.save(pet);
-        return pet;
+      Long petId = app.getPet().getId();
+      petRepository.findById(petId).ifPresent(pet -> {
+        pet.setAdopted(true);
+        petRepository.save(pet);
       });
+      // Reject all other pending applications for this pet
+      adoptionRepository.findByPet_IdAndStatus(petId, AdoptionApplication.Status.PENDING).stream()
+          .filter(a -> !a.getId().equals(applicationId))
+          .forEach(other -> {
+            other.setStatus(AdoptionApplication.Status.REJECTED);
+            adoptionRepository.save(other);
+          });
     }
 
     app.setStatus(status);

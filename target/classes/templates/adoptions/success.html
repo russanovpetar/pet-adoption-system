@@ -1,34 +1,31 @@
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <div th:replace="~{layout/base :: nav-bar}"></div>
+  <main class="container">
+    <h2>Successfully applied for adoption</h2>
 
-<div th:replace="layout/base :: nav-bar"></div>
-<div>
-  <h2>Successfully applied for adoption</h2>
-  <br/>
-  <h3>Details</h3>
-  <br/>
-  <p>
-    <strong>Pet Name:</strong>
-    <span th:text="${adoptionApplication.petName}">Name</span>
-  </p>
+    <div class="card info-block">
+      <h3>Details</h3>
+      <p>
+        <strong>Pet Name:</strong>
+        <span th:text="${adoptionApplication.petName}">Name</span>
+      </p>
+      <p>
+        <strong>Status:</strong>
+        <span th:text="${adoptionApplication.status}">PENDING</span>
+      </p>
+      <p>
+        <strong>Your message:</strong>
+        <span th:text="${adoptionApplication.message}">n/a</span>
+      </p>
+      <p class="text-muted">
+        Applied on
+        <span th:text="${#temporals.format(adoptionApplication.appliedAt, 'dd MMM yyyy HH:mm')}">
+          01 Jan 2025
+        </span>
+      </p>
+    </div>
 
-  <p>
-    <strong>Status:</strong>
-    <span th:text="${adoptionApplication.status}">2</span>
-  </p>
-
-  <p>
-    <strong>User motivation message:</strong>
-    <span th:text="${adoptionApplication.message}">n/a</span>
-  </p>
-
-  <p style="color: #666; font-size: 0.9em;">
-    Applied on
-    <span th:text="${#temporals.format(adoptionApplication.appliedAt, 'dd MMM yyyy HH:mm')}">
-            01 Jan 2025
-          </span>
-  </p>
-
-  <a th:href="@{/ui/pet}">← Back to pets</a>
-</div>
-
+    <a th:href="@{/ui/pet}" class="back-link">← Back to pets</a>
+  </main>
 </html>
