@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+  <div th:replace="~{layout/base :: nav-bar}"></div>
+  <main class="container">
+    <h2>Registered Shelters</h2>
+
+    <a th:href="@{/ui/admin/shelter/create}" sec:authorize="hasRole('ADMIN')" class="btn btn-primary">
+      Create Shelter
+    </a>
+
+    <div th:each="shelter : ${shelters}" class="card mt-1">
+      <a th:href="@{/ui/admin/shelter/{id}(id=${shelter.id})}"
+         aria-label="View shelter details">
+        <h4 th:text="${shelter.name}">Shelter Name</h4>
+        <p class="text-muted" th:text="${shelter.location}">Shelter Location</p>
+      </a>
+    </div>
+  </main>
+</html>

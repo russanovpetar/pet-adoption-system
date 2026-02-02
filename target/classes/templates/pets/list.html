@@ -1,19 +1,25 @@
 <!DOCTYPE html>
-<html th:replace="layout/base :: body" xmlns:th="http://www.thymeleaf.org" lang=""
-      xmlns:sec="http://www.w3.org/1999/xhtml">
-<body>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+  <div th:replace="~{layout/base :: nav-bar}"></div>
+  <main class="container container--wide">
+    <h2>Available Pets</h2>
 
-<h2>Available Pets</h2>
+    <p th:if="${message}" class="alert alert-success" th:text="${message}"></p>
+    <p th:if="${error}" class="alert alert-error" th:text="${error}"></p>
 
-<ul>
-  <li th:each="pet : ${pets}">
-    <a th:href="@{/ui/pet/{id}(id=${pet.id})}"
-       th:text="${pet.name}"></a>
-  </li>
-</ul>
+    <p th:if="${#lists.isEmpty(pets)}" class="text-muted mt-1">No pets available yet. Check back later!</p>
 
-<a th:href="@{/ui/pet/create}"
-   sec:authorize="hasRole('SHELTER_STAFF')">Add Pet</a>
-
-</body>
+    <div th:if="${!#lists.isEmpty(pets)}" class="pet-grid mt-1">
+      <a th:each="pet : ${pets}" th:href="@{/ui/pet/{id}(id=${pet.id})}" class="pet-card">
+        <div class="pet-card-image">
+          <img th:if="${pet.imagePath != null}" th:src="@{/uploads/pets/{filename}(filename=${pet.imageFilename})}" alt="Pet photo">
+          <img th:if="${pet.imagePath == null}" th:src="@{/images/pet-placeholder.svg}" alt="" class="pet-card-image--placeholder">
+        </div>
+        <div class="pet-card-body">
+          <span class="pet-card-name" th:text="${pet.name}">Pet Name</span>
+          <span th:if="${pet.createdAt != null}" class="pet-card-date text-muted" th:text="${#temporals.format(pet.createdAt, 'dd MMM yyyy')}">Date</span>
+        </div>
+      </a>
+    </div>
+  </main>
 </html>

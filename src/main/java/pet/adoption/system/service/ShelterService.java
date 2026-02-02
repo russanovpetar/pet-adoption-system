@@ -1,5 +1,6 @@
 package pet.adoption.system.service;
 
+import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,14 @@ public class ShelterService {
 
   public ShelterService(ShelterRepository shelterRepo) {
     this.shelterRepo = shelterRepo;
+  }
+
+  public List<Shelter> listShelters() {
+    return shelterRepo.findAll();
+  }
+
+  public Shelter getShelterById(Long id) {
+    return shelterRepo.findById(id).orElseThrow(() -> new IllegalArgumentException("Shelter not found"));
   }
 
   public void createShelter(ShelterRequest request) {

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <div th:replace="~{layout/base :: nav-bar}"></div>
+  <main class="container">
+    <h2>My Applications</h2>
+
+    <p th:if="${#lists.isEmpty(myAdoptionApplications)}" class="text-muted">
+      You have not submitted any adoption applications yet.
+    </p>
+
+    <ul th:if="${!#lists.isEmpty(myAdoptionApplications)}" class="app-list">
+      <li th:each="myApp : ${myAdoptionApplications}" class="card">
+        <h3 th:text="${myApp.petName}">Pet Name</h3>
+
+        <p>
+          <strong>Status:</strong>
+          <span th:if="${myApp.status == 'APPROVED'}" style="display:inline-block;padding:0.25rem 0.6rem;border-radius:1rem;font-size:0.8rem;font-weight:600;background:#d1fae5;color:#065f46;" th:text="${myApp.status}">APPROVED</span>
+          <span th:if="${myApp.status == 'REJECTED'}" style="display:inline-block;padding:0.25rem 0.6rem;border-radius:1rem;font-size:0.8rem;font-weight:600;background:#fee2e2;color:#991b1b;" th:text="${myApp.status}">REJECTED</span>
+          <span th:if="${myApp.status == 'PENDING'}" style="display:inline-block;padding:0.25rem 0.6rem;border-radius:1rem;font-size:0.8rem;font-weight:600;background:#fef3c7;color:#92400e;" th:text="${myApp.status}">PENDING</span>
+        </p>
+
+        <p th:if="${myApp.message}">
+          <strong>Your message:</strong><br/>
+          <span th:text="${myApp.message}">Message</span>
+        </p>
+
+        <p class="text-muted">
+          Applied on
+          <span th:text="${#temporals.format(myApp.appliedAt, 'dd MMM yyyy HH:mm')}">
+            01 Jan 2025
+          </span>
+        </p>
+      </li>
+    </ul>
+  </main>
+</html>

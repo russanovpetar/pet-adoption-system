@@ -8,6 +8,7 @@ public class PostResponse {
   private final String title;
   private final String content;
   private final String authorUsername;
+  private final String authorRole;
   private final Double averageRating;
   private final Long ratingCount;
   private final LocalDateTime createdAt;
@@ -17,6 +18,7 @@ public class PostResponse {
     this.title = post.getTitle();
     this.content = post.getContent();
     this.authorUsername = post.getAuthor().getUsername();
+    this.authorRole = formatRole(post.getAuthor().getRole());
     this.createdAt = post.getCreatedAt();
     this.averageRating = 0.0;
     this.ratingCount = 0L;
@@ -27,9 +29,21 @@ public class PostResponse {
     this.title = post.getTitle();
     this.content = post.getContent();
     this.authorUsername = post.getAuthor().getUsername();
+    this.authorRole = formatRole(post.getAuthor().getRole());
     this.createdAt = post.getCreatedAt();
     this.averageRating = averageRating;
     this.ratingCount = ratingCount;
+  }
+
+  private static String formatRole(pet.adoption.system.entity.Role role) {
+    if (role == null) return "";
+    String[] words = role.name().replace("_", " ").toLowerCase().split(" ");
+    StringBuilder sb = new StringBuilder();
+    for (String w : words) {
+      if (sb.length() > 0) sb.append(" ");
+      sb.append(Character.toUpperCase(w.charAt(0))).append(w.substring(1));
+    }
+    return sb.toString();
   }
 
   public Long getId() {
@@ -46,6 +60,10 @@ public class PostResponse {
 
   public String getAuthorUsername() {
     return authorUsername;
+  }
+
+  public String getAuthorRole() {
+    return authorRole;
   }
 
   public LocalDateTime getCreatedAt() {

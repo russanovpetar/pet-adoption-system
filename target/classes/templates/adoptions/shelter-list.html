@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+  <div th:replace="~{layout/base :: nav-bar}"></div>
+  <main class="container">
+    <h2>Applications for My Shelter</h2>
+
+<div class="filters">
+  <a th:href="@{/ui/adoption/shelter}"
+     th:class="'filter ' + (${status} == null ? 'active' : '')">
+    ALL
+  </a>
+
+  <a th:href="@{/ui/adoption/shelter(status='PENDING')}"
+     th:class="'filter pending ' + (${status != null and status.name() == 'PENDING'} ? 'active' : '')">
+    PENDING
+  </a>
+
+  <a th:href="@{/ui/adoption/shelter(status='APPROVED')}"
+     th:class="'filter approved ' + (${status != null and status.name() == 'APPROVED'} ? 'active' : '')">
+    APPROVED
+  </a>
+
+  <a th:href="@{/ui/adoption/shelter(status='REJECTED')}"
+     th:class="'filter rejected ' + (${status != null and status.name() == 'REJECTED'} ? 'active' : '')">
+    REJECTED
+  </a>
+</div>
+
+<p th:if="${#lists.isEmpty(shelterAdoptionApplications)}" class="no-applications">
+  No adoption applications currently.
+</p>
+
+<div th:each="app : ${shelterAdoptionApplications}" class="application-card">
+  <div class="application-header">
+    <strong th:text="${app.petName}">Pet Name</strong>
+    <span th:class="${'status-' + app.status}" th:text="${app.status}">PENDING</span>
+  </div>
+
+  <div class="application-info">
+    <p><strong>Adopter:</strong> <span th:text="${app.adopterUsername}">username</span></p>
+    <p th:if="${app.message}"><strong>Message:</strong> <span th:text="${app.message}"></span></p>
+    <p><strong>Applied at:</strong> <span th:text="${#temporals.format(app.appliedAt, 'dd MMM yyyy HH:mm')}">01 Jan 2025</span></p>
+  </div>
+
+  <div class="application-actions" th:if="${app.status == 'PENDING'}">
+    <form th:action="@{/ui/adoption/{id}/review(id=${app.id})}" method="post" style="display:inline;">
+      <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+      <button type="submit" name="status" value="APPROVED" class="approve-btn">Approve</button>
+      <button type="submit" name="status" value="REJECTED" class="reject-btn">Reject</button>
+    </form>
+  </div>
+</div>
+  </main>
+</html>

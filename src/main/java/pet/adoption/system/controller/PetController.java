@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import pet.adoption.system.dto.request.PetRequest;
 import pet.adoption.system.dto.response.GenericResponse;
 import pet.adoption.system.entity.Pet;
+import pet.adoption.system.exception.PetNotFoundException;
 import pet.adoption.system.exception.UserNotFoundException;
 import pet.adoption.system.service.PetService;
 
@@ -30,8 +31,25 @@ public class PetController {
   public ResponseEntity<?> viewPet(@PathVariable Long id) {
     try {
       return ResponseEntity.status(HttpStatus.OK).body(petService.viewPet(id));
-    } catch (IllegalArgumentException ex) {
+    } catch (PetNotFoundException ex) {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new GenericResponse("Pet not found"));
+    } catch (Exception ex) {
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new GenericResponse("An error occurred"));
+    }
+  }
+
+  @DeleteMapping("/{id}")
+  @PreAuthorize("hasRole('SHELTER_STAFF')")
+  public ResponseEntity<?> removePet(@PathVariable Long id, Authentication authentication) {
+    try {
+      petService.removePet(id, authentication.getName());
+      return ResponseEntity.noContent().build();
+    } catch (PetNotFoundException ex) {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new GenericResponse("Pet not found"));
+    } catch (UserNotFoundException ex) {
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new GenericResponse("User not found"));
+    } catch (IllegalStateException ex) {
+      return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new GenericResponse(ex.getMessage()));
     } catch (Exception ex) {
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new GenericResponse("An error occurred"));
     }
@@ -41,7 +59,7 @@ public class PetController {
   @PreAuthorize("hasRole('SHELTER_STAFF')")
   public ResponseEntity<?> addPet(@Valid @RequestBody PetRequest request, Authentication authentication) {
     try {
-      Pet pet = petService.addPet(request, authentication.getName());
+      Pet pet = petService.addPet(request, authentication.getName(), null);
       return ResponseEntity.status(HttpStatus.CREATED).body(pet);
     } catch (UserNotFoundException ex) {
       return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new GenericResponse("User not found"));

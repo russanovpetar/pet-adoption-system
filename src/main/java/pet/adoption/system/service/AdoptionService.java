@@ -72,6 +72,18 @@ public class AdoptionService {
     return apps.stream().map(AdoptionApplicationResponse::new).toList();
   }
 
+  public List<AdoptionApplicationResponse> getApplicationsForShelterByStatus(
+      String username,
+      AdoptionApplication.Status status) {
+    User user = userRepository.findByUsername(username).orElseThrow(UserNotFoundException::new);
+
+    List<AdoptionApplication> apps = adoptionRepository.findByPetShelterId(user.getShelter().getId()).stream()
+        .filter(app -> app.getStatus() == status)
+        .toList();
+
+    return apps.stream().map(AdoptionApplicationResponse::new).toList();
+  }
+
   public AdoptionApplicationResponse reviewApplication(
       Long applicationId,
       AdoptionApplication.Status status,
@@ -83,6 +95,21 @@ public class AdoptionService {
 
     if (!app.getPet().getShelter().getId().equals(user.getShelter().getId())) {
       throw new AccessDeniedException("Cannot review applications for other shelters");
+    }
+
+    if (status == AdoptionApplication.Status.APPROVED) {
+      Long petId = app.getPet().getId();
+      petRepository.findById(petId).ifPresent(pet -> {
+        pet.setAdopted(true);
+        petRepository.save(pet);
+      });
+      // Reject all other pending applications for this pet
+      adoptionRepository.findByPet_IdAndStatus(petId, AdoptionApplication.Status.PENDING).stream()
+          .filter(a -> !a.getId().equals(applicationId))
+          .forEach(other -> {
+            other.setStatus(AdoptionApplication.Status.REJECTED);
+            adoptionRepository.save(other);
+          });
     }
 
     app.setStatus(status);

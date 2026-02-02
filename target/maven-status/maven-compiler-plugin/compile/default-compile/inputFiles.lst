@@ -3,6 +3,7 @@
 /Users/i540995_1/fmi/Spring/pet-adoption-system/src/main/java/pet/adoption/system/config/CustomUserDetailsService.java
 /Users/i540995_1/fmi/Spring/pet-adoption-system/src/main/java/pet/adoption/system/config/PasswordConfig.java
 /Users/i540995_1/fmi/Spring/pet-adoption-system/src/main/java/pet/adoption/system/config/SecurityConfig.java
+/Users/i540995_1/fmi/Spring/pet-adoption-system/src/main/java/pet/adoption/system/config/WebConfig.java
 /Users/i540995_1/fmi/Spring/pet-adoption-system/src/main/java/pet/adoption/system/controller/AdoptionController.java
 /Users/i540995_1/fmi/Spring/pet-adoption-system/src/main/java/pet/adoption/system/controller/AuthController.java
 /Users/i540995_1/fmi/Spring/pet-adoption-system/src/main/java/pet/adoption/system/controller/PetController.java
@@ -49,6 +50,8 @@
 /Users/i540995_1/fmi/Spring/pet-adoption-system/src/main/java/pet/adoption/system/service/UserService.java
 /Users/i540995_1/fmi/Spring/pet-adoption-system/src/main/java/pet/adoption/system/ui/AdoptionUIController.java
 /Users/i540995_1/fmi/Spring/pet-adoption-system/src/main/java/pet/adoption/system/ui/AuthUIController.java
+/Users/i540995_1/fmi/Spring/pet-adoption-system/src/main/java/pet/adoption/system/ui/HomeUIController.java
+/Users/i540995_1/fmi/Spring/pet-adoption-system/src/main/java/pet/adoption/system/ui/MyShelterUIController.java
 /Users/i540995_1/fmi/Spring/pet-adoption-system/src/main/java/pet/adoption/system/ui/PetUIController.java
 /Users/i540995_1/fmi/Spring/pet-adoption-system/src/main/java/pet/adoption/system/ui/PostUIController.java
 /Users/i540995_1/fmi/Spring/pet-adoption-system/src/main/java/pet/adoption/system/ui/ShelterStaffUIController.java

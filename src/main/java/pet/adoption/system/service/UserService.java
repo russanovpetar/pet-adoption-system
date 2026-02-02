@@ -2,6 +2,8 @@ package pet.adoption.system.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import java.util.List;
+import java.util.Optional;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import pet.adoption.system.dto.request.RegisterRequest;
@@ -12,6 +14,7 @@ import pet.adoption.system.entity.User;
 import pet.adoption.system.exception.ShelterNotFoundException;
 import pet.adoption.system.exception.ShelterStaffAlreadyExistsException;
 import pet.adoption.system.exception.UserAlreadyExistsException;
+import pet.adoption.system.exception.UserNotFoundException;
 import pet.adoption.system.repository.ShelterRepository;
 import pet.adoption.system.repository.UserRepository;
 
@@ -57,5 +60,30 @@ public class UserService {
     staff.setShelter(shelter);
 
     userRepo.save(staff);
+  }
+
+  public void assignUserAsShelterStaff(Long userId, Long shelterId) {
+    User user = userRepo.findById(userId).orElseThrow(UserNotFoundException::new);
+    Shelter shelter = shelterRepo.findById(shelterId).orElseThrow(ShelterNotFoundException::new);
+
+    if (user.getShelter() != null) {
+      throw new ShelterStaffAlreadyExistsException();
+    }
+
+    user.setRole(Role.SHELTER_STAFF);
+    user.setShelter(shelter);
+    userRepo.save(user);
+  }
+
+  public List<User> findEligibleUsersForShelterStaff() {
+    return userRepo.findByRoleAndShelterIsNullOrderByUsernameAsc(Role.ADOPTER);
+  }
+
+  public Optional<Shelter> getShelterForUsername(String username) {
+    return userRepo.findByUsername(username).map(User::getShelter);
+  }
+
+  public List<User> getStaffByShelterId(Long shelterId) {
+    return userRepo.findByShelter_IdOrderByUsernameAsc(shelterId);
   }
 }

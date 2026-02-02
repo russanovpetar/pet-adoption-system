@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+  <div th:replace="~{layout/base :: nav-bar}"></div>
+  <main class="container">
+    <h2>Add Shelter Staff</h2>
+    <p class="text-muted">
+      Select a registered user to add as staff to
+      <strong th:text="${shelter.name}">Shelter Name</strong>.
+      Only users who have registered as adopters and are not yet assigned to a shelter appear below.
+    </p>
+
+    <p th:if="${#lists.isEmpty(eligibleUsers)}" class="text-muted">
+      No eligible users. Users must register first before they can be added as shelter staff.
+    </p>
+
+    <div th:if="${!#lists.isEmpty(eligibleUsers)}" class="mt-1">
+      <div th:each="user : ${eligibleUsers}" class="card" style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem;">
+        <span>
+          <strong th:text="${user.username}">username</strong>
+        </span>
+        <form th:action="@{/ui/admin/staff/add}" method="post" style="display:inline; margin:0;">
+          <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+          <input type="hidden" name="userId" th:value="${user.id}" />
+          <input type="hidden" name="shelterId" th:value="${shelter.id}" />
+          <button type="submit" class="btn btn-primary">Add to shelter</button>
+        </form>
+      </div>
+    </div>
+
+    <a th:href="@{/ui/admin/shelter/{id}(id=${shelter.id})}" class="back-link">← Back to shelter</a>
+  </main>
+</html>
