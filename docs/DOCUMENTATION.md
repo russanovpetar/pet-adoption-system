@@ -54,7 +54,7 @@
 
 - **С Maven (от корена на проекта):**
   ```
-    mvn spring-boot:ru
+    mvn spring-boot:run
   ```
   На Windows: `mvnw.cmd spring-boot:run`
 
